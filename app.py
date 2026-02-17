@@ -7,9 +7,9 @@ try:
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel('gemini-1.5-flash')
 except Exception as e:
-    st.error("API Key not found in Streamlit Secrets. Please add it to use the AI.")
+    st.error("API Key not found or invalid. Please check your Streamlit Secrets.")
 
-# 2. UI DESIGN: Basic Settings
+# 2. UI DESIGN
 st.set_page_config(page_title="FlexFuel AI", page_icon="💪", layout="wide")
 st.title("💪 FlexFuel AI: Your Personalized Coach")
 
@@ -38,6 +38,7 @@ st.subheader("💬 Chat with FlexAI")
 user_input = st.text_input("Example: 'Give me a high protein lunch for ₹150'", key="user_chat")
 
 if user_input:
+    # Giving the AI context so it acts like a professional
     full_prompt = f"Coach, I am {weight}kg, my goal is {goal}, my diet is {diet}, and my budget is ₹{budget}. Question: {user_input}"
     
     try:
@@ -47,12 +48,9 @@ if user_input:
                 st.markdown("### 🥗 Coach's Recommendation")
                 st.write(response.text)
     except Exception as e:
-        st.error(f"Error connecting to AI: {e}")
+        st.error(f"FlexAI is having trouble connecting. Check if your API Key is valid.")
 
 # 6. SUPPLEMENT TIPS
 st.divider()
 st.subheader("💊 Quick Supplement Guide")
-if diet == "Vegan" or diet == "Vegetarian":
-    st.info("Since you are plant-based, consider Vitamin B12 and Creatine.")
-else:
-    st.info("Focus on Whey Protein and Creatine for muscle recovery.")
+st.info("Since you're working on your fitness, don't forget to stay hydrated and prioritize sleep!")
