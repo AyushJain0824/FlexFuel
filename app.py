@@ -24,15 +24,21 @@ col1, col2 = st.columns(2)
 col1.metric("Target Calories", f"{int(calories)} kcal")
 col2.metric("Daily Budget", f"₹{budget}")
 
-# 5. Real AI Chatbot
-st.divider()
+# --- THE UPDATED AI SECTION ---
 st.subheader("💬 Chat with FlexAI")
-user_input = st.text_input("Example: 'Suggest a high protein dinner for ₹150'")
+user_input = st.text_input("Example: 'Suggest a high protein dinner for ₹150'", key="user_chat")
 
+# Only run the AI if the user has typed something
 if user_input:
-    context = f"User: {weight}kg, Goal: {goal}, Diet: {diet}, Budget: ₹{budget}."
-    full_prompt = f"{context}\nQuestion: {user_input}"
+    # Giving the AI clear context
+    full_prompt = f"Coach, I am {weight}kg, my goal is to {goal}, my diet is {diet}, and my budget is ₹{budget}. User Question: {user_input}"
     
-    with st.spinner('FlexAI is thinking...'):
-        response = model.generate_content(full_prompt)
-        st.markdown(response.text)
+    try:
+        with st.spinner('FlexAI is thinking...'):
+            response = model.generate_content(full_prompt)
+            if response.text:
+                st.markdown(response.text)
+            else:
+                st.error("AI couldn't generate a response. Try rephrasing.")
+    except Exception as e:
+        st.error(f"Error: {e}")
